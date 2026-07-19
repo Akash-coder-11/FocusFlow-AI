@@ -146,7 +146,7 @@ export async function analyzeNotes(notes: string): Promise<AIAnalysisResult> {
 
   // MOCK MODE – no API key, return demo data after a realistic delay
   if (!API_KEY) {
-    console.info('[FocusFlow] Demo mode – no API key configured. Using sample AI response.');
+    console.debug('[FocusFlow] Demo mode – no API key configured. Using sample AI response.');
     await new Promise(r => setTimeout(r, 1800));
     return MOCK_AI_RESULT;
   }
@@ -190,7 +190,7 @@ export async function analyzeNotes(notes: string): Promise<AIAnalysisResult> {
 
   if (!text) {
     // API returned OK but empty — use safe defaults
-    console.warn('[FocusFlow] Empty AI response, using safe fallback');
+    console.debug('[FocusFlow] Empty AI response, using safe fallback');
     return { ...SAFE_DEFAULTS, summary: 'The AI returned an empty response. Please try with a more detailed input.' };
   }
 

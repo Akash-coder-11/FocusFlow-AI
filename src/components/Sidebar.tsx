@@ -101,7 +101,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasR
 
         {/* GitHub link */}
         <a
-          href="https://github.com/yourusername/focusflow-ai"
+          href="https://github.com/REPLACE_WITH_YOUR_USERNAME/focusflow-ai"
           target="_blank"
           rel="noopener noreferrer"
           className="btn-ghost w-full text-xs justify-start gap-2 text-slate-500 hover:text-slate-300"

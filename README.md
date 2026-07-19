@@ -66,7 +66,7 @@ FocusFlow AI takes any unstructured input — meeting notes, project briefs, Sla
 
 ### 1. Clone
 ```bash
-git clone https://github.com/yourusername/focusflow-ai.git
+git clone https://github.com/REPLACE_WITH_YOUR_USERNAME/focusflow-ai.git
 cd focusflow-ai
 ```
 

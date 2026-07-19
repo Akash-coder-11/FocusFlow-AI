@@ -1,8 +1,5 @@
-// ─────────────────────────────────────────────
-//  Schedule Panel – AI-suggested time blocks
-// ─────────────────────────────────────────────
-import React from 'react';
-import { Calendar, Clock, Coffee, Users, Eye, Zap } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar, Clock, Coffee, Users, Eye, Zap, AlertCircle } from 'lucide-react';
 import type { ScheduleSlot } from '../types';
 import clsx from 'clsx';
 
@@ -18,6 +15,13 @@ const typeConfig = {
 };
 
 export const SchedulePanel: React.FC<SchedulePanelProps> = ({ schedule }) => {
+  const [showStatus, setShowStatus] = useState<string | null>(null);
+
+  const handleExport = () => {
+    setShowStatus('Calendar integration is planned for the next release.');
+    setTimeout(() => setShowStatus(null), 3000);
+  };
+
   return (
     <section className="glass-card p-5 animate-slide-up" aria-label="Suggested schedule">
       {/* Header */}
@@ -88,14 +92,23 @@ export const SchedulePanel: React.FC<SchedulePanelProps> = ({ schedule }) => {
       </div>
 
       {/* Add to calendar CTA */}
-      <button
-        className="btn-ghost w-full justify-center mt-4 text-xs border border-surface-border"
-        aria-label="Export schedule to calendar"
-        onClick={() => alert('Calendar export: Connect your Google Calendar API key to enable this feature.')}
-      >
-        <Calendar size={13} />
-        Export to Calendar
-      </button>
+      <div className="mt-4">
+        {showStatus ? (
+          <div className="flex items-center gap-2 p-2.5 rounded-xl bg-brand-600/10 border border-brand-600/20 text-xs text-brand-400 animate-fade-in">
+            <AlertCircle size={13} className="flex-shrink-0" />
+            <span>{showStatus}</span>
+          </div>
+        ) : (
+          <button
+            className="btn-ghost w-full justify-center text-xs border border-surface-border"
+            aria-label="Export schedule to calendar"
+            onClick={handleExport}
+          >
+            <Calendar size={13} />
+            Export to Calendar
+          </button>
+        )}
+      </div>
     </section>
   );
 };

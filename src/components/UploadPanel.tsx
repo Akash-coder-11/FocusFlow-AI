@@ -25,11 +25,13 @@ export const UploadPanel: React.FC<UploadPanelProps> = ({ onAnalyze, isLoading }
   const [isDragging, setDrag]   = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const [showTips, setShowTips] = useState(false);
+  const [fileError, setFileErr] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleFile = useCallback((file: File) => {
+    setFileErr(null);
     if (!file.type.match(/text|plain|markdown|md/i) && !file.name.match(/\.(txt|md|text)$/i)) {
-      alert('Please upload a plain text (.txt) or Markdown (.md) file.');
+      setFileErr('Only plain text (.txt) or Markdown (.md) files are supported.');
       return;
     }
     const reader = new FileReader();
@@ -157,6 +159,21 @@ export const UploadPanel: React.FC<UploadPanelProps> = ({ onAnalyze, isLoading }
               <X size={12} />
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Inline file error */}
+      {fileError && (
+        <div className="flex items-center gap-2 mb-3 px-3 py-2 rounded-lg bg-red-500/10
+                        border border-red-500/20 animate-fade-in" role="alert">
+          <span className="text-xs text-red-400">{fileError}</span>
+          <button
+            onClick={() => setFileErr(null)}
+            className="ml-auto text-red-400/60 hover:text-red-400 transition-colors"
+            aria-label="Dismiss error"
+          >
+            <X size={12} />
+          </button>
         </div>
       )}
 
