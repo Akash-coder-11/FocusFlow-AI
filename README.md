@@ -30,6 +30,44 @@ FocusFlow AI takes any unstructured input — meeting notes, project briefs, Sla
 | 📊 **Efficiency Score** | 0-100 rating of how productive the meeting was |
 
 ---
+---
+
+# Why FocusFlow AI?
+
+FocusFlow AI directly addresses the hackathon challenge by combining multiple AI-powered productivity workflows into a single intelligent platform.
+
+✅ Meeting Summarization
+
+✅ AI Task Extraction
+
+✅ Smart Scheduling
+
+✅ Follow-up Email Generation
+
+✅ AI Productivity Assistant
+
+✅ Workflow Automation
+
+✅ Decision Support
+
+Instead of forcing users to manually organize information, FocusFlow AI automatically transforms unstructured content into actionable work in seconds.
+
+# Screenshots
+
+## Dashboard
+
+<img width="1913" height="972" alt="Screenshot 2026-07-19 163128" src="https://github.com/user-attachments/assets/097d4e05-7706-485b-ad2c-53bb66a77ca0" />
+
+
+## AI Analysis
+
+<img width="1905" height="967" alt="Screenshot 2026-07-19 165028" src="https://github.com/user-attachments/assets/69626366-384d-4439-8b14-8aa5a257ae3e" />
+
+
+## AI Assistant
+
+<img width="1881" height="903" alt="image" src="https://github.com/user-attachments/assets/ffdba85d-b0dd-4cc6-9c4d-388eb323d5ea" />
+
 
 ## Core Features
 
@@ -66,7 +104,7 @@ FocusFlow AI takes any unstructured input — meeting notes, project briefs, Sla
 
 ### 1. Clone
 ```bash
-git clone https://github.com/REPLACE_WITH_YOUR_USERNAME/focusflow-ai.git
+git clone https://github.com/Akash-coder-11/focusflow-ai.git
 cd focusflow-ai
 ```
 
