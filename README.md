@@ -1,201 +1,193 @@
-# FocusFlow AI 🚀
-### AI-Powered Productivity Command Center
+# FocusFlow AI
 
-> **Hackathon Submission** – Transform messy meeting notes into structured, actionable intelligence in seconds using Google Gemini 2.0 Flash.
+**AI-powered productivity command center — turn messy meeting notes into structured actions in seconds.**
 
-![FocusFlow AI Dashboard](./public/screenshot.png)
-
----
-
-## 🎯 Problem Statement
-
-Knowledge workers spend **~47% of their workday** in meetings, yet studies show that **over 60% of action items from meetings are never completed**. The gap between "what was decided" and "what gets done" costs teams enormous productivity.
-
-Manual note-taking, follow-up email drafting, task assignment, and scheduling burn hours every week. There's no reason AI can't handle this.
+> Built with React, TypeScript, Tailwind CSS, and Google Gemini 2.0 Flash.
 
 ---
 
-## 💡 The Solution
+## The Problem
 
-**FocusFlow AI** is a single-page command center that takes any unstructured input — meeting notes, project briefs, email chains, documents — and instantly returns:
+Knowledge workers spend ~47% of their workday in meetings, yet more than 60% of action items are never completed. The gap between "what was decided" and "what gets done" costs teams hours every week.
 
-| Output | What You Get |
+Summarizing notes, drafting follow-up emails, assigning tasks, and planning the rest of the day — all of this is still done manually. There's no reason it should be.
+
+---
+
+## The Solution
+
+FocusFlow AI takes any unstructured input — meeting notes, project briefs, Slack threads, email chains — and returns a complete, structured action plan in under 3 seconds.
+
+**Paste text in → organized productivity out.**
+
+| Output | What you get |
 |--------|-------------|
-| 📝 **Executive Summary** | 2-3 sentence brief of what was decided |
+| 📝 **Meeting Summary** | Executive brief + key decisions |
 | ✅ **Action Items** | Every task with owner, deadline, and priority |
-| 📧 **Follow-Up Email** | Professional email ready to send |
-| 📅 **Schedule Suggestions** | Optimized time blocks for the next 4-6 hours |
-| 💡 **AI Insights** | Non-obvious patterns, risks, and recommendations |
-| 📊 **Meeting Efficiency Score** | 0-100 rating of how productive the meeting was |
+| 📧 **Follow-Up Email** | Professional draft, ready to send or edit |
+| 📅 **Suggested Schedule** | Time-blocked plan for the next 4-6 hours |
+| 💡 **AI Insights** | Hidden risks, patterns, and recommendations |
+| 📊 **Efficiency Score** | 0-100 rating of how productive the meeting was |
 
 ---
 
-## ✨ Core Features
+## Core Features
 
-- **🤖 AI Analysis Engine** – Powered by Gemini 2.0 Flash with structured JSON output
-- **📋 Meeting Summarizer** – Extracts key decisions and efficiency score
-- **✅ Task Extractor** – Priority-ranked action items with owner/deadline metadata
-- **✉️ Email Generator** – Professional follow-up email, editable and one-click sendable
-- **📅 Smart Scheduler** – Time-blocked post-meeting action plan
-- **💬 AI Assistant** – Ask follow-up questions with full meeting context
-- **📤 File Upload** – Drag-and-drop .txt/.md files
-- **⚡ Demo Mode** – Works without an API key using realistic sample data
-- **📱 Responsive Design** – Full mobile support with sidebar drawer
-
----
-
-## 🛠️ Tech Stack
-
-| Technology | Purpose |
-|-----------|---------|
-| **React 19** | UI framework |
-| **TypeScript** | Type safety |
-| **Tailwind CSS v3** | Styling and design system |
-| **Vite** | Build tool and dev server |
-| **Google Gemini 2.0 Flash** | AI model (structured JSON output) |
-| **Lucide React** | Icons |
-| **clsx** | Conditional class utilities |
+- **🤖 Gemini 2.0 Flash AI** — structured JSON output, low latency, reliable parsing
+- **📋 Meeting Summarizer** — executive brief with key decisions and sentiment analysis
+- **✅ Interactive Task Board** — filter by priority, mark complete, track progress
+- **✉️ Email Generator** — editable draft with one-click "Open in Mail Client"
+- **📅 Smart Scheduler** — color-coded timeline of post-meeting time blocks
+- **💬 AI Assistant** — context-aware chat to ask follow-up questions
+- **📤 File Upload** — drag-and-drop `.txt` / `.md` files directly
+- **⚡ Demo Mode** — full app works without an API key using realistic sample data
+- **📱 Responsive** — clean layout on desktop and mobile
+- **♿ Accessible** — skip links, ARIA labels, visible focus rings, semantic HTML
 
 ---
 
-## 🚀 Quick Start
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | React 19 + TypeScript |
+| Styling | Tailwind CSS v3 |
+| Build | Vite 8 |
+| AI Model | Google Gemini 2.0 Flash |
+| Icons | Lucide React |
+| Utilities | clsx |
+
+---
+
+## Getting Started
 
 ### Prerequisites
-- Node.js 18+
-- npm 9+
+- Node.js 18+ and npm 9+
 
-### 1. Clone the repository
+### 1. Clone
 ```bash
 git clone https://github.com/yourusername/focusflow-ai.git
 cd focusflow-ai
 ```
 
-### 2. Install dependencies
+### 2. Install
 ```bash
 npm install
 ```
 
-### 3. Configure environment (optional)
+### 3. Configure AI (optional)
 ```bash
 cp .env.example .env
-# Edit .env and add your Gemini API key
-# Get a free key at: https://aistudio.google.com/app/apikey
+# Open .env and set your Gemini API key
+# Get a free key → https://aistudio.google.com/app/apikey
 ```
 
-> **No API key?** The app runs in **demo mode** automatically with realistic sample data. Perfect for local testing and demos.
+> **No API key?** Skip this step. The app runs in **demo mode** automatically and shows realistic sample output. Perfect for trying the app or running demos.
 
-### 4. Start the dev server
+### 4. Start
 ```bash
 npm run dev
+# → http://localhost:5173
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+### 5. Build for production
+```bash
+npm run build
+npm run preview
+```
 
 ---
 
-## 📖 Demo Walkthrough (< 2 minutes)
+## Demo Walkthrough (< 2 minutes)
 
-1. **Open the app** – The dashboard is immediately ready
-2. **Click "Sample"** – Loads a realistic Q3 planning meeting transcript
-3. **Click "Analyze with AI"** – Watch Gemini process and structure the content
-4. **Dashboard updates** showing:
-   - Executive summary with efficiency score
-   - 7 action items color-coded by priority
-   - Professional follow-up email draft
-   - Time-blocked schedule for the next 8 hours
-   - AI insights surfacing hidden risks
-5. **Click "AI Assistant"** – Ask follow-up questions like "What's most urgent?"
-6. **Click "Edit" on the email** – Personalize and copy to clipboard
+1. Open the app at `http://localhost:5173`
+2. Click **"Sample"** to load a realistic Q3 planning meeting transcript
+3. Click **"Analyze with AI"** — watch the dashboard update in real time
+4. Review the **Meeting Summary** card with efficiency score and sentiment
+5. Check the **Action Items** panel — 7 tasks, filterable by priority, all interactive
+6. Read the **Follow-Up Email** draft — click "Edit" to personalize, "Copy" to clipboard
+7. Glance at the **Suggested Schedule** — time-blocked for the next 6 hours
+8. Read **AI Insights** — non-obvious risks surfaced automatically
+9. Click **"AI Assistant"** in the sidebar — ask "What's most urgent?" for a contextual reply
 
 ---
 
-## 🧠 How the AI Works
+## How the AI Works
 
-### Structured JSON Output
-The app sends a carefully engineered prompt to Gemini that demands **JSON-only responses** with a defined schema. This ensures:
-- Predictable, parseable output every time
-- No free-text parsing fragility
-- Graceful error handling with fallback states
+### Structured Output by Design
+The prompt explicitly demands JSON-only output with a fixed schema. This means:
+- No free-text parsing or regex hacks
+- Predictable, type-safe results every time
+- Every field has a safe fallback if the model omits it
 
-### The Prompt Engineering
+### The Prompt Strategy
 ```
-Analyze meeting notes → Return ONLY this JSON structure:
+Analyze meeting notes → Return ONLY this JSON:
 {
-  summary, key_decisions, action_items[{task, owner, deadline, priority}],
-  follow_up_email{subject, to, body},
-  suggested_schedule[{time, duration, title, type}],
+  summary, key_decisions,
+  action_items[{ task, owner, deadline, priority, status }],
+  follow_up_email{ subject, to, body },
+  suggested_schedule[{ time, duration, title, type }],
   insights[], sentiment, meeting_efficiency_score
 }
 ```
 
-### AI-Driven Productivity Gains
-- **Saves 30-45 min/meeting** on manual summarization and follow-ups
-- **Increases task completion** by making ownership and deadlines explicit
-- **Reduces meeting scheduling overhead** with intelligent time-block suggestions
-- **Surfaces blind spots** with pattern-recognition insights
+### Error Resilience
+- Missing fields → filled with safe defaults (never crashes the UI)
+- Invalid JSON → user-friendly error with retry option
+- Network failure → specific message (not a generic 500)
+- Rate limits / auth errors → actionable error copy
+- Empty API key → seamless mock mode, no error
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
 ├── components/
-│   ├── Sidebar.tsx          # Navigation sidebar
-│   ├── Header.tsx           # Top bar with AI status
-│   ├── UploadPanel.tsx      # Input with drag-and-drop
-│   ├── SummaryPanel.tsx     # Meeting summary + score
-│   ├── TasksPanel.tsx       # Action items with filters
-│   ├── EmailPanel.tsx       # Follow-up email editor
-│   ├── SchedulePanel.tsx    # Timeline schedule view
-│   ├── InsightsPanel.tsx    # Stats + AI insights
-│   ├── AssistantPanel.tsx   # Chat AI assistant
-│   ├── LoadingState.tsx     # Shimmer skeletons
-│   └── EmptyState.tsx       # Idle and error states
+│   ├── Header.tsx          # Sticky top bar with skip link + AI status
+│   ├── Sidebar.tsx         # Navigation + session status
+│   ├── UploadPanel.tsx     # Text input, drag-drop, file upload, char count
+│   ├── SummaryPanel.tsx    # Summary + efficiency score ring + decisions
+│   ├── TasksPanel.tsx      # Interactive tasks with priority filters
+│   ├── EmailPanel.tsx      # Editable email draft + mailto launch
+│   ├── SchedulePanel.tsx   # Timeline schedule view
+│   ├── InsightsPanel.tsx   # Stats grid + AI insight cards
+│   ├── AssistantPanel.tsx  # Context-aware AI chat
+│   ├── LoadingState.tsx    # Shimmer skeleton UI
+│   └── EmptyState.tsx      # Idle and error states
 ├── services/
-│   └── aiService.ts         # Gemini API + mock mode
+│   └── aiService.ts        # Gemini API + full validation + mock mode
 ├── data/
-│   └── mockData.ts          # Realistic sample data
+│   └── mockData.ts         # Realistic sample data for demo mode
 ├── types/
-│   └── index.ts             # Shared TypeScript types
-├── App.tsx                  # Root layout + routing
-├── main.tsx                 # Entry point
-└── index.css                # Design system + utilities
+│   └── index.ts            # Shared TypeScript interfaces
+├── App.tsx                 # Root layout, state management, view routing
+├── main.tsx                # Entry point
+└── index.css               # Design system, tokens, animations
 ```
 
 ---
 
-## 🎨 Design System
-
-- **Color palette**: Deep navy dark mode (`#0f0f1a`) with indigo brand (`#6366f1`)
-- **Typography**: Inter (UI) + JetBrains Mono (code/email)
-- **Glass morphism**: Translucent cards with subtle borders
-- **Animations**: Shimmer skeletons, slide-up reveals, fade-ins
-- **Accessibility**: ARIA labels, keyboard navigation, sufficient contrast
-
----
-
-## 🔐 Environment Variables
+## Environment Variables
 
 | Variable | Required | Description |
 |---------|---------|-------------|
-| `VITE_GEMINI_API_KEY` | Optional | Gemini API key. App uses mock data if unset. |
+| `VITE_GEMINI_API_KEY` | No | Gemini API key. App uses demo data if unset. |
 
 ---
 
-## 🏆 Hackathon Notes
+## Productivity Impact
 
-- **Built in**: ~1 focused session
-- **Lines of code**: ~1,500 (clean, modular)
-- **Demo ready**: Yes – works without API key
-- **GitHub friendly**: Lightweight repo, no secrets committed
-
----
-
-## 📄 License
-
-MIT – Free to use, modify, and distribute.
+| Manual effort | With FocusFlow AI |
+|--------------|------------------|
+| 30-45 min to summarize meeting notes | < 3 seconds |
+| 15-20 min to write follow-up email | Instant draft, 2 min to review |
+| No systematic task tracking | All items extracted with owner + deadline |
+| Ad-hoc scheduling after meeting | AI-generated time-blocked plan |
+| Insights require manual review | Surfaced automatically |
 
 ---
 
-*Made with ❤️ and Gemini 2.0 Flash for the AI Productivity Hackathon*
+*Built for the AI Productivity Hackathon · FocusFlow AI © 2026*

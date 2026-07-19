@@ -52,7 +52,8 @@ export const UploadPanel: React.FC<UploadPanelProps> = ({ onAnalyze, isLoading }
     setFileName('sample-meeting-notes.txt');
   };
 
-  const canAnalyze = text.trim().length > 20 && !isLoading;
+  const charCount   = text.length;
+  const canAnalyze   = text.trim().length > 20 && !isLoading;
 
   return (
     <section className="glass-card p-5 animate-fade-in" aria-label="AI input panel">
@@ -126,6 +127,21 @@ export const UploadPanel: React.FC<UploadPanelProps> = ({ onAnalyze, isLoading }
         )}
       </div>
 
+      {/* Char count + clear */}
+      {text.length > 0 && !isLoading && (
+        <div className="flex items-center justify-between mb-2 px-1">
+          <span className="text-[11px] text-slate-600">
+            {charCount.toLocaleString()} characters
+          </span>
+          <button
+            onClick={() => { setText(''); setFileName(null); }}
+            className="text-[11px] text-slate-600 hover:text-red-400 transition-colors"
+            aria-label="Clear input"
+          >
+            Clear
+          </button>
+        </div>
+      )}
       {/* File badge */}
       {fileName && (
         <div className="flex items-center gap-2 mb-3 animate-bounce-in">
@@ -202,14 +218,15 @@ export const UploadPanel: React.FC<UploadPanelProps> = ({ onAnalyze, isLoading }
       {/* Progress bar */}
       {isLoading && (
         <div className="mt-3 animate-fade-in">
-          <div className="flex justify-between text-xs text-slate-500 mb-1">
-            <span>Processing with Gemini 2.0 Flash…</span>
+          <div className="flex justify-between text-xs text-slate-500 mb-1.5">
+            <span className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse-slow" />
+              Processing with Gemini 2.0 Flash…
+            </span>
             <span>Structuring output</span>
           </div>
           <div className="h-1 bg-surface-hover rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-brand-600 via-violet-500 to-brand-600
-                            rounded-full w-1/2 animate-shimmer"
-              style={{ backgroundSize: '200% 100%' }} />
+            <div className="h-full progress-shimmer rounded-full" />
           </div>
         </div>
       )}

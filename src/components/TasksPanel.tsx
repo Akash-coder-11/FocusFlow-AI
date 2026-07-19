@@ -66,38 +66,45 @@ export const TasksPanel: React.FC<TasksPanelProps> = ({ items }) => {
         </div>
 
         {/* Progress pill */}
-        <div className="text-right flex-shrink-0">
-          <div className="text-xs text-slate-500 mb-1">{Math.round((counts.done / counts.total) * 100)}%</div>
-          <div className="w-20 h-1.5 bg-surface-hover rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-brand-500 to-violet-500 rounded-full transition-all duration-500"
-              style={{ width: `${(counts.done / counts.total) * 100}%` }}
-            />
+        {counts.total > 0 && (
+          <div className="text-right flex-shrink-0">
+            <div className="text-xs text-slate-500 mb-1">
+              {Math.round((counts.done / counts.total) * 100)}% done
+            </div>
+            <div className="w-20 h-1.5 bg-surface-hover rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-brand-500 to-violet-500 rounded-full transition-all duration-500"
+                style={{ width: `${(counts.done / counts.total) * 100}%` }}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-1.5 mb-4">
-        {filterOptions.map(f => (
-          <button
-            key={f.key}
-            onClick={() => setFilter(f.key)}
-            className={clsx(
-              'px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200',
-              filter === f.key
-                ? 'bg-brand-600 text-white'
-                : 'bg-surface-hover text-slate-400 hover:text-slate-200'
-            )}
-          >
-            {f.label}
-            {f.key !== 'all' && (
-              <span className="ml-1 opacity-60">
-                {items.filter(i => i.priority === f.key).length}
+        {filterOptions.map(f => {
+          const count = f.key === 'all' ? items.length : items.filter(i => i.priority === f.key).length;
+          return (
+            <button
+              key={f.key}
+              onClick={() => setFilter(f.key)}
+              aria-label={`Filter by ${f.label} priority (${count} items)`}
+              aria-pressed={filter === f.key}
+              className={clsx(
+                'px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200',
+                filter === f.key
+                  ? 'bg-brand-600 text-white shadow-glow-sm'
+                  : 'bg-surface-hover text-slate-400 hover:text-slate-200 hover:bg-surface-hover'
+              )}
+            >
+              {f.label}
+              <span className={clsx('ml-1.5', filter === f.key ? 'opacity-80' : 'opacity-40')}>
+                {count}
               </span>
-            )}
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </div>
 
       {/* Task list */}
@@ -158,7 +165,17 @@ export const TasksPanel: React.FC<TasksPanelProps> = ({ items }) => {
       </ul>
 
       {filtered.length === 0 && (
-        <p className="text-sm text-slate-500 text-center py-6">No tasks for this filter.</p>
+        <div className="text-center py-8">
+          <p className="text-sm text-slate-500">No {filter === 'all' ? '' : filter + ' '}tasks found.</p>
+          {filter !== 'all' && (
+            <button
+              onClick={() => setFilter('all')}
+              className="text-xs text-brand-400 hover:text-brand-300 mt-2 underline underline-offset-2"
+            >
+              Show all tasks
+            </button>
+          )}
+        </div>
       )}
     </section>
   );

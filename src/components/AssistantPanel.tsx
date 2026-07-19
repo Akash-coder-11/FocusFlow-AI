@@ -2,7 +2,7 @@
 //  AI Assistant Chat Panel
 // ─────────────────────────────────────────────
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, Send, Bot, User } from 'lucide-react';
+import { MessageSquare, Send, Bot, User, Zap } from 'lucide-react';
 import type { ChatMessage, AIAnalysisResult } from '../types';
 import { askAssistant } from '../services/aiService';
 import { Spinner } from './LoadingState';
@@ -12,27 +12,57 @@ interface AssistantPanelProps {
   context: AIAnalysisResult | null;
 }
 
-const SUGGESTED_QUESTIONS = [
-  "What's the most urgent task I should do first?",
-  "Summarize the key risks from this meeting",
-  "How should I handle the churn issue?",
-  "Which items are blocking the team?",
-];
+function getWelcomeMessage(context: AIAnalysisResult | null): string {
+  if (!context) {
+    return "Hi! I'm your FocusFlow AI assistant. Analyze a meeting first, then ask me anything — priorities, risks, blockers, next steps, or who's responsible for what.";
+  }
+  const critical = context.action_items.filter(a => a.priority === 'critical').length;
+  const high     = context.action_items.filter(a => a.priority === 'high').length;
+  return `Meeting analyzed ✓ — **${context.action_items.length} action items** found (${critical} critical, ${high} high priority), efficiency score **${context.meeting_efficiency_score}/100**. What would you like to dig into?`;
+}
+
+// Context-aware suggested questions
+function getSuggestedQuestions(context: AIAnalysisResult | null): string[] {
+  if (!context) {
+    return [
+      "What makes a good meeting follow-up?",
+      "How do I prioritize action items?",
+      "What should I analyze first?",
+    ];
+  }
+  return [
+    "What's the most urgent task to tackle first?",
+    "Summarize the key risks from this meeting",
+    "Who has the most tasks and could be overloaded?",
+    "What should be delegated or deferred?",
+  ];
+}
 
 export const AssistantPanel: React.FC<AssistantPanelProps> = ({ context }) => {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: 'welcome',
-      role: 'assistant',
-      content: context
-        ? `I've analyzed your meeting. You have **${context.action_items.length} action items** and a **${context.meeting_efficiency_score}% efficiency score**. What would you like to dig into?`
-        : "Hi! I'm your FocusFlow AI assistant. Analyze a meeting first, then ask me anything about the results — priorities, risks, team workload, or next steps.",
-      timestamp: new Date(),
-    },
-  ]);
-  const [input, setInput]   = useState('');
-  const [loading, setLoad]  = useState(false);
-  const bottomRef           = useRef<HTMLDivElement>(null);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [{
+    id:        'welcome',
+    role:      'assistant',
+    content:   getWelcomeMessage(context),
+    timestamp: new Date(),
+  }]);
+  const [input,   setInput]  = useState('');
+  const [loading, setLoad]   = useState(false);
+  const bottomRef            = useRef<HTMLDivElement>(null);
+  const prevContextRef       = useRef(context);
+
+  // Update welcome message when context arrives (e.g. user analyzes after opening panel)
+  useEffect(() => {
+    if (prevContextRef.current === null && context !== null) {
+      setMessages(prev => {
+        const withoutWelcome = prev.filter(m => m.id !== 'welcome');
+        return [
+          { id: 'welcome', role: 'assistant', content: getWelcomeMessage(context), timestamp: new Date() },
+          ...withoutWelcome,
+        ];
+      });
+    }
+    prevContextRef.current = context;
+  }, [context]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -42,9 +72,9 @@ export const AssistantPanel: React.FC<AssistantPanelProps> = ({ context }) => {
     if (!text.trim() || loading) return;
 
     const userMsg: ChatMessage = {
-      id: Date.now().toString(),
-      role: 'user',
-      content: text.trim(),
+      id:        Date.now().toString(),
+      role:      'user',
+      content:   text.trim(),
       timestamp: new Date(),
     };
 
@@ -55,16 +85,16 @@ export const AssistantPanel: React.FC<AssistantPanelProps> = ({ context }) => {
     try {
       const reply = await askAssistant(text.trim(), context);
       setMessages(prev => [...prev, {
-        id: Date.now().toString() + 'r',
-        role: 'assistant',
-        content: reply,
+        id:        `${Date.now()}r`,
+        role:      'assistant',
+        content:   reply,
         timestamp: new Date(),
       }]);
     } catch {
       setMessages(prev => [...prev, {
-        id: Date.now().toString() + 'e',
-        role: 'assistant',
-        content: 'Sorry, I ran into an issue. Please try again.',
+        id:        `${Date.now()}e`,
+        role:      'assistant',
+        content:   'Sorry, I ran into an issue. Please try again.',
         timestamp: new Date(),
       }]);
     } finally {
@@ -72,35 +102,41 @@ export const AssistantPanel: React.FC<AssistantPanelProps> = ({ context }) => {
     }
   };
 
-  const handleKey = (e: React.KeyboardEvent) => {
+  const handleKey = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       send(input);
     }
   };
 
+  const suggestedQuestions = getSuggestedQuestions(context);
+  const showSuggestions    = messages.length <= 2;
+
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)] max-h-[700px]">
+    <div className="flex flex-col" style={{ height: 'calc(100vh - 9rem)', maxHeight: '720px' }}>
       {/* Header */}
-      <div className="glass-card p-4 mb-4 flex items-center gap-3">
+      <div className="glass-card p-4 mb-4 flex items-center gap-3 flex-shrink-0">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-violet-600
                         flex items-center justify-center shadow-glow-sm">
           <MessageSquare size={18} className="text-white" />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <h2 className="font-bold text-slate-100">AI Assistant</h2>
-          <p className="text-xs text-slate-500">
-            {context ? 'Context loaded from your meeting analysis' : 'Analyze a meeting to unlock full context'}
+          <p className="text-xs text-slate-500 truncate">
+            {context
+              ? `Context: ${context.action_items.length} tasks · score ${context.meeting_efficiency_score}/100`
+              : 'Analyze a meeting to unlock full context'}
           </p>
         </div>
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full
+                        bg-emerald-500/10 border border-emerald-500/20 flex-shrink-0">
           <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-slow" />
           <span className="text-[11px] font-semibold text-emerald-400">Live</span>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto no-scrollbar glass-card p-4 mb-4 space-y-4">
+      <div className="flex-1 overflow-y-auto no-scrollbar glass-card p-4 mb-3 space-y-4 min-h-0">
         {messages.map(msg => (
           <div
             key={msg.id}
@@ -117,23 +153,23 @@ export const AssistantPanel: React.FC<AssistantPanelProps> = ({ context }) => {
                 : 'bg-gradient-to-br from-slate-600 to-slate-700'
             )}>
               {msg.role === 'assistant'
-                ? <Bot size={15} className="text-white" />
+                ? <Bot  size={15} className="text-white" />
                 : <User size={15} className="text-white" />
               }
             </div>
 
             {/* Bubble */}
             <div className={clsx(
-              'max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed',
+              'max-w-[82%] px-4 py-3 rounded-2xl text-sm leading-relaxed',
               msg.role === 'assistant'
-                ? 'bg-surface-hover border border-surface-border text-slate-200'
+                ? 'bg-surface-hover border border-surface-border text-slate-200 rounded-tl-sm'
                 : 'bg-brand-600 text-white rounded-tr-sm'
             )}>
-              {/* Render simple bold markdown */}
-              {msg.content.split(/\*\*(.*?)\*\*/).map((part, i) =>
-                i % 2 === 0
-                  ? <span key={i}>{part}</span>
-                  : <strong key={i} className="font-semibold">{part}</strong>
+              {/* Minimal bold markdown renderer */}
+              {msg.content.split(/(\*\*[^*]+\*\*)/).map((part, i) =>
+                part.startsWith('**') && part.endsWith('**')
+                  ? <strong key={i} className="font-semibold">{part.slice(2, -2)}</strong>
+                  : <span key={i}>{part}</span>
               )}
             </div>
           </div>
@@ -145,40 +181,43 @@ export const AssistantPanel: React.FC<AssistantPanelProps> = ({ context }) => {
                             flex items-center justify-center">
               <Bot size={15} className="text-white" />
             </div>
-            <div className="px-4 py-3 rounded-2xl bg-surface-hover border border-surface-border
-                            flex items-center gap-2">
+            <div className="px-4 py-3 rounded-2xl rounded-tl-sm bg-surface-hover
+                            border border-surface-border flex items-center gap-2">
               <Spinner size={14} className="text-brand-400" />
               <span className="text-xs text-slate-500">Thinking…</span>
             </div>
           </div>
         )}
-        <div ref={bottomRef} />
+        <div ref={bottomRef} aria-hidden="true" />
       </div>
 
-      {/* Suggestions */}
-      {messages.length <= 2 && (
-        <div className="flex flex-wrap gap-2 mb-3 animate-fade-in">
-          {SUGGESTED_QUESTIONS.map((q, i) => (
+      {/* Suggested questions */}
+      {showSuggestions && (
+        <div className="flex flex-wrap gap-2 mb-3 animate-fade-in flex-shrink-0">
+          {suggestedQuestions.map((q, i) => (
             <button
               key={i}
               onClick={() => send(q)}
+              disabled={loading}
+              aria-label={`Ask: ${q}`}
               className="px-3 py-1.5 rounded-xl bg-surface-hover border border-surface-border
                          text-xs text-slate-400 hover:text-slate-100 hover:border-brand-600/40
-                         transition-all duration-200"
+                         disabled:opacity-50 transition-all duration-200 text-left"
             >
+              <Zap size={10} className="inline mr-1 text-brand-500" />
               {q}
             </button>
           ))}
         </div>
       )}
 
-      {/* Input */}
-      <div className="glass-card p-3 flex gap-3 items-end">
+      {/* Input bar */}
+      <div className="glass-card p-3 flex gap-3 items-end flex-shrink-0">
         <textarea
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKey}
-          placeholder="Ask about priorities, risks, team workload…"
+          placeholder="Ask about priorities, risks, ownership, next steps… (Enter to send)"
           rows={1}
           className="input-base flex-1 min-h-0 py-2.5 resize-none"
           aria-label="Chat input"
